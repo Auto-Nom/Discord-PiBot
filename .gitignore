@@ -1,0 +1,11 @@
+# eslint config
+.eslintrc.json
+
+#node module folder
+node_modules
+
+#file with my discord info etc.
+.ID
+
+# Vim backups etc.
+*~
