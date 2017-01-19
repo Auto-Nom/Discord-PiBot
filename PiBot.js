@@ -18,7 +18,7 @@ bot.on("message", msg => {
     // test command to delete at some stage
     if (msg.content.startsWith("!name")) {
         let [...name] = msg.content.split(" ").slice(1);
-        msg.reply(`Hello ${name.toString().replace(/,/g, " ")}`);
+        msg.reply(`Hello ${name.join(" ")}`);
     }
 
     // add a steam ID for the user
@@ -79,7 +79,7 @@ bot.on("message", msg => {
 
     // display a random quote from the responses file.
     if (msg.content.startsWith("!quote")) {
-        let quote = responses["Quotes"][Math.floor(Math.random() * responses["Quotes"].length)];
+        let quote = randomChoice(responses["Quotes"]);
         msg.channel.sendMessage(quote);
     }
 
@@ -91,16 +91,18 @@ bot.on("message", msg => {
 
 // welcome new members
 bot.on("guildMemberAdd", (member) => {
-    member.guild.defaultChannel.sendMessage(`Welcome, ${member.user.username}!`);
+    member.guild.defaultChannel.sendMessage(`Greetings, ${member.user.username}!`);
 });
 
 // send a message when a user comes online
 bot.on("presenceUpdate", function (omember, nmember) {
     if (nmember.presence.status === "online") {
-        nmember.guild.defaultChannel.sendMessage(`@${nmember.user.username}, "Oh good, you're back! It's been too long since I bathed in human misery."`);
+        nmember.guild.defaultChannel.sendMessage(`@${nmember.user.username}, ` + randomChoice(responses["Online"]));
     }
-    if (nmember.presence.game.name === "dota 2" || nmember.presence.game.name === "DOTA 2") {
-        nmember.guild.defaultChannel.sendMessage("Okay, time to forget the myriad external pressures and life stresses that have driven you to blot out the pain with video games, let's play some Dota!");
+    if (nmember.presence.game) {
+        if (nmember.presence.game.name === "dota 2" || nmember.presence.game.name === "DOTA 2") {
+            nmember.guild.defaultChannel.sendMessage(randomChoice(responses["DotaStart"]));
+        }
     }
 });
 
@@ -113,12 +115,16 @@ bot.on("ready", () => {
 });
 
 // log all errors, warnings, and info
-bot.on("error", e => { console.console.error(e); });
-bot.on("warn", e => {console.console.warn(e); });
+bot.on("error", e => { console.error(e); });
+bot.on("warn", e => {console.warn(e); });
 bot.on("debug", e => {console.info(e); });
 
 bot.login(config.token);
 
 function dice(low=1, high=100) {
     return Math.floor(Math.random() * (high - low +1)) + low;
+}
+
+function randomChoice(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
 }
