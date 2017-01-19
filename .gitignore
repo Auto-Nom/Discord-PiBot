@@ -4,8 +4,10 @@
 #node module folder
 node_modules
 
-#file with my discord info etc.
+#files with my private info etc.
 .ID
+config.json
+PlayerIDs.json
 
 # Vim backups etc.
 *~

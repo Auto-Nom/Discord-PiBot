@@ -94,9 +94,22 @@ bot.on("guildMemberAdd", (member) => {
     member.guild.defaultChannel.sendMessage(`Welcome, ${member.user.username}!`);
 });
 
+// send a message when a user comes online
+bot.on("presenceUpdate", function (omember, nmember) {
+    if (nmember.presence.status === "online") {
+        nmember.guild.defaultChannel.sendMessage(`@${nmember.user.username}, "Oh good, you're back! It's been too long since I bathed in human misery."`);
+    }
+    if (nmember.presence.game.name === "dota 2" || nmember.presence.game.name === "DOTA 2") {
+        nmember.guild.defaultChannel.sendMessage("Okay, time to forget the myriad external pressures and life stresses that have driven you to blot out the pain with video games, let's play some Dota!");
+    }
+});
+
+// when the bot comes online, send a message
 bot.on("ready", () => {
-    console.log("PiBot ONLINE AND REPORTING FOR DUTY!");
-    // bot.channel.sendMessage("I HAVE GAINED SENTIENCE");
+    console.log("Ready for action.");
+    bot.guilds.array().forEach(function(guild){
+        guild.defaultChannel.sendMessage("PiBot ONLINE AND REPORTING FOR DUTY!");
+    });
 });
 
 // log all errors, warnings, and info
